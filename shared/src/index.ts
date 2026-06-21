@@ -22,6 +22,7 @@ export interface WorkExperience {
   location: string;
   highlights: string[];
   stack: string[];
+  logoUrl?: string;
 }
 
 export interface Project {

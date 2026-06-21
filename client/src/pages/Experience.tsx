@@ -2,6 +2,63 @@ import { useState } from 'react';
 import { MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import type { WorkExperience } from 'shared';
 
+// Tech/stack keywords highlighted inside the job descriptions. Curated so the
+// terms actually appear in the prose below (longer terms first so e.g.
+// "dbt Core" wins over "dbt").
+const TECH_KEYWORDS = [
+  'dbt Core', 'dbt', 'BigQuery', 'GCP', 'SQL', 'Python',
+  'Apache Airflow', 'Airflow', 'GitLab CI/CD', 'Docker',
+  'JavaScript', 'TypeScript', 'Scikit-learn', 'PCA',
+  'machine learning', 'hyperspectral', 'blockchain',
+  'Scrum Master', 'Agile', 'data modeling', 'dimensionality reduction'
+];
+
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+// Splits text into React nodes, wrapping any matched keyword in an accent span.
+function highlightKeywords(text: string, keywords: string[]) {
+  const uniq = Array.from(new Set(keywords)).sort((a, b) => b.length - a.length);
+  if (uniq.length === 0) return text;
+  const lookup = new Set(uniq.map(k => k.toLowerCase()));
+  const re = new RegExp(`\\b(${uniq.map(escapeRegExp).join('|')})\\b`, 'gi');
+  return text.split(re).map((part, i) =>
+    lookup.has(part.toLowerCase())
+      ? <span className="stack-keyword" key={i}>{part}</span>
+      : <span key={i}>{part}</span>
+  );
+}
+
+// Company / university logo with a graceful initials fallback when no logo URL
+// is provided or the remote image fails to load.
+function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string }) {
+  const [failed, setFailed] = useState(false);
+  const initials = name
+    .replace(/[^A-Za-z\s]/g, ' ')
+    .trim()
+    .split(/\s+/)
+    .map(w => w[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase();
+
+  if (logoUrl && !failed) {
+    return (
+      <img
+        className="company-logo"
+        src={logoUrl}
+        alt={`${name} logo`}
+        loading="lazy"
+        onError={() => setFailed(true)}
+      />
+    );
+  }
+  return (
+    <div className="company-logo company-logo-fallback" aria-hidden="true">
+      {initials}
+    </div>
+  );
+}
+
 export default function Experience() {
   const experiences: WorkExperience[] = [
     {
@@ -9,6 +66,7 @@ export default function Experience() {
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
       location: 'France (Open to Relocation)',
+      logoUrl: 'https://logo.clearbit.com/carrefour.com',
       highlights: [
         'Define the target technical vision and development standards, implementing engineering best practices and conducting code reviews to maintain technical excellence.',
         'Design, deploy, and maintain complex dbt data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using dbt Core and a custom Carrefour framework.',
@@ -47,6 +105,7 @@ export default function Experience() {
       company: 'UTAD',
       period: 'May 2021 — Jul 2021',
       location: 'Vila Real, Portugal',
+      logoUrl: 'https://logo.clearbit.com/utad.pt',
       highlights: [
         'Conducted research on the early detection of plant grapevine leaf diseases using hyperspectral imaging data.',
         'Leveraged machine learning techniques (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
@@ -82,25 +141,30 @@ export default function Experience() {
       <div className="timeline" id="experience-timeline">
         {experiences.map((exp, idx) => {
           const isExpanded = expandedIndex[idx];
+          // Highlight the job's own stack plus the shared tech glossary.
+          const keywords = [...exp.stack, ...TECH_KEYWORDS];
           return (
             <div className="timeline-item" key={idx}>
               <div className="timeline-marker"></div>
-              
+
               <div className="timeline-content">
-                <div 
-                  className="timeline-header" 
+                <div
+                  className="timeline-header"
                   onClick={() => toggleExpand(idx)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <div>
-                    <h3 className="timeline-role">
-                      {exp.role} <span style={{ fontWeight: 400, color: 'var(--text-light)' }}>at</span> <span className="timeline-company">{exp.company}</span>
-                    </h3>
-                    <div className="timeline-location">
-                      <MapPin size={14} /> {exp.location}
+                  <div className="timeline-header-main">
+                    <CompanyLogo name={exp.company} logoUrl={exp.logoUrl} />
+                    <div>
+                      <h3 className="timeline-role">
+                        {exp.role} <span style={{ fontWeight: 400, color: 'var(--text-light)' }}>at</span> <span className="timeline-company">{exp.company}</span>
+                      </h3>
+                      <div className="timeline-location">
+                        <MapPin size={14} /> {exp.location}
+                      </div>
                     </div>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div className="timeline-header-side">
                     <span className="timeline-period">{exp.period}</span>
                     {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
@@ -110,7 +174,7 @@ export default function Experience() {
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                     <ul className="timeline-details">
                       {exp.highlights.map((highlight, hIdx) => (
-                        <li key={hIdx}>{highlight}</li>
+                        <li key={hIdx}>{highlightKeywords(highlight, keywords)}</li>
                       ))}
                     </ul>
 
