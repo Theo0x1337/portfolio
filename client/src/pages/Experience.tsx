@@ -66,7 +66,7 @@ export default function Experience() {
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
       location: 'France (Open to Relocation)',
-      logoUrl: '/logos/carrefour.svg',
+      logoUrl: 'https://img.logo.dev/carrefour.com',
       highlights: [
         'Define the target technical vision and development standards, implementing engineering best practices and conducting code reviews to maintain technical excellence.',
         'Design, deploy, and maintain complex dbt data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using dbt Core and a custom Carrefour framework.',
@@ -81,6 +81,7 @@ export default function Experience() {
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
       location: 'France',
+      logoUrl: 'https://img.logo.dev/univ-smb.fr',
       highlights: [
         'Deliver continuing professional education programs for adults upskilling or transitioning into the data field.',
         'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines/architecture.'
@@ -92,7 +93,7 @@ export default function Experience() {
       company: 'OPCODES',
       period: 'Mar 2022 — Apr 2023',
       location: 'France',
-      logoUrl: '/logos/opcodes.svg',
+      logoUrl: 'https://img.logo.dev/opcodes.fr',
       highlights: [
         'Reverse-engineered existing data pipelines and ingestion scripts in Python to extract relevant transaction data from blockchain logs.',
         'Structured and stored large volumes of transaction data efficiently into Google BigQuery database tables.',
@@ -106,7 +107,7 @@ export default function Experience() {
       company: 'UTAD',
       period: 'May 2021 — Jul 2021',
       location: 'Vila Real, Portugal',
-      logoUrl: '/logos/utad.svg',
+      logoUrl: 'https://img.logo.dev/utad.pt',
       highlights: [
         'Conducted research on the early detection of plant grapevine leaf diseases using hyperspectral imaging data.',
         'Leveraged machine learning techniques (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
