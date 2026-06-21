@@ -133,18 +133,29 @@ export default function Experience() {
     }
   ];
 
-  // NOTE: placeholder details — please confirm/correct the degree, field and years.
   const education: EducationEntry[] = [
     {
-      degree: 'Engineering Degree — Diplôme d’Ingénieur',
-      field: 'Computer Science',
+      degree: 'M.S. in Engineering — Diplôme d’Ingénieur',
+      field: 'Computer Science & Data',
       school: 'Polytech Annecy-Chambéry · Université Savoie Mont Blanc (USMB)',
-      period: '20XX — 20XX',
+      period: '2019 — 2022',
       location: 'Annecy, France',
-      logoUrl: logoDevUrl('univ-smb.fr'),
-      details: [
-        'Erasmus research exchange at UTAD (Vila Real, Portugal) — hyperspectral imaging and machine learning.'
-      ]
+      logoUrl: logoDevUrl('univ-smb.fr')
+    },
+    {
+      degree: 'Exchange Program',
+      field: 'Computer Science',
+      school: 'Babeș-Bolyai University',
+      period: '2021 — 2022',
+      location: 'Cluj-Napoca, Romania',
+      logoUrl: logoDevUrl('ubbcluj.ro')
+    },
+    {
+      degree: 'Associate Degree in Computer Science — DUT Informatique',
+      school: 'Université de Lorraine',
+      period: '2017 — 2019',
+      location: 'France',
+      logoUrl: logoDevUrl('univ-lorraine.fr')
     }
   ];
 
