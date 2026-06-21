@@ -15,6 +15,13 @@ const TECH_KEYWORDS = [
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+// logo.dev publishable token (set VITE_LOGO_DEV_KEY). A pk_ key is meant to be
+// exposed client-side. Without it logo.dev returns a blank placeholder.
+const LOGODEV_TOKEN = import.meta.env.VITE_LOGO_DEV_KEY ?? '';
+const logoDevUrl = (domain: string) =>
+  `https://img.logo.dev/${domain}?size=128&format=png` +
+  (LOGODEV_TOKEN ? `&token=${LOGODEV_TOKEN}` : '');
+
 // Splits text into React nodes, wrapping any matched keyword in an accent span.
 function highlightKeywords(text: string, keywords: string[]) {
   const uniq = Array.from(new Set(keywords)).sort((a, b) => b.length - a.length);
@@ -66,7 +73,7 @@ export default function Experience() {
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
       location: 'France (Open to Relocation)',
-      logoUrl: 'https://img.logo.dev/carrefour.com',
+      logoUrl: logoDevUrl('carrefour.com'),
       highlights: [
         'Define the target technical vision and development standards, implementing engineering best practices and conducting code reviews to maintain technical excellence.',
         'Design, deploy, and maintain complex dbt data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using dbt Core and a custom Carrefour framework.',
@@ -81,7 +88,7 @@ export default function Experience() {
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
       location: 'France',
-      logoUrl: 'https://img.logo.dev/univ-smb.fr',
+      logoUrl: logoDevUrl('univ-smb.fr'),
       highlights: [
         'Deliver continuing professional education programs for adults upskilling or transitioning into the data field.',
         'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines/architecture.'
@@ -93,7 +100,7 @@ export default function Experience() {
       company: 'OPCODES',
       period: 'Mar 2022 — Apr 2023',
       location: 'France',
-      logoUrl: 'https://img.logo.dev/opcodes.fr',
+      logoUrl: logoDevUrl('opcodes.fr'),
       highlights: [
         'Reverse-engineered existing data pipelines and ingestion scripts in Python to extract relevant transaction data from blockchain logs.',
         'Structured and stored large volumes of transaction data efficiently into Google BigQuery database tables.',
@@ -107,7 +114,7 @@ export default function Experience() {
       company: 'UTAD',
       period: 'May 2021 — Jul 2021',
       location: 'Vila Real, Portugal',
-      logoUrl: 'https://img.logo.dev/utad.pt',
+      logoUrl: logoDevUrl('utad.pt'),
       highlights: [
         'Conducted research on the early detection of plant grapevine leaf diseases using hyperspectral imaging data.',
         'Leveraged machine learning techniques (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
