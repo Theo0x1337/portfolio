@@ -649,7 +649,7 @@ a:hover {
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 12px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 12px;
 }
 
@@ -657,6 +657,13 @@ a:hover {
   display: flex;
   align-items: flex-start;
   gap: 14px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Let the role/company text column shrink and wrap instead of pushing the
+   years pill onto a new line. */
+.timeline-header-main > div {
   min-width: 0;
 }
 
@@ -665,6 +672,17 @@ a:hover {
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+}
+
+.timeline-period {
+  white-space: nowrap;
+}
+
+/* On narrow screens, stack the years under the title for breathing room. */
+@media (max-width: 520px) {
+  .timeline-header {
+    flex-wrap: wrap;
+  }
 }
 
 .company-logo {
