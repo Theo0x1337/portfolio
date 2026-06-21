@@ -2,6 +2,16 @@ import { useState } from 'react';
 import { MapPin, ChevronDown, ChevronUp } from 'lucide-react';
 import type { WorkExperience } from 'shared';
 
+interface EducationEntry {
+  degree: string;
+  school: string;
+  field?: string;
+  period: string;
+  location?: string;
+  logoUrl?: string;
+  details?: string[];
+}
+
 // Tech/stack keywords highlighted inside the job descriptions. Curated so the
 // terms actually appear in the prose below (longer terms first so e.g.
 // "dbt Core" wins over "dbt").
@@ -88,7 +98,6 @@ export default function Experience() {
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
       location: 'France',
-      logoUrl: logoDevUrl('univ-smb.fr'),
       highlights: [
         'Deliver continuing professional education programs for adults upskilling or transitioning into the data field.',
         'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines/architecture.'
@@ -121,6 +130,21 @@ export default function Experience() {
         'Co-authored and published research paper: "Automatic detection of Flavescence dorée grapevine disease in hyperspectral images using machine learning" in Elsevier\'s Procedia Computer Science.'
       ],
       stack: ['Python', 'Scikit-Learn', 'PCA', 'Hyperspectral Sensors', 'Machine Learning']
+    }
+  ];
+
+  // NOTE: placeholder details — please confirm/correct the degree, field and years.
+  const education: EducationEntry[] = [
+    {
+      degree: 'Engineering Degree — Diplôme d’Ingénieur',
+      field: 'Computer Science',
+      school: 'Polytech Annecy-Chambéry · Université Savoie Mont Blanc (USMB)',
+      period: '20XX — 20XX',
+      location: 'Annecy, France',
+      logoUrl: logoDevUrl('univ-smb.fr'),
+      details: [
+        'Erasmus research exchange at UTAD (Vila Real, Portugal) — hyperspectral imaging and machine learning.'
+      ]
     }
   ];
 
@@ -201,6 +225,55 @@ export default function Experience() {
             </div>
           );
         })}
+      </div>
+
+      <div className="section-title-wrapper" style={{ marginTop: '64px' }}>
+        <span className="section-tagline">Academic Background</span>
+        <h2>Education</h2>
+        <p>My academic foundation in engineering and computer science.</p>
+      </div>
+
+      <div className="timeline" id="education-timeline">
+        {education.map((edu, idx) => (
+          <div className="timeline-item" key={idx}>
+            <div className="timeline-marker"></div>
+
+            <div className="timeline-content">
+              <div className="timeline-header" style={{ cursor: 'default' }}>
+                <div className="timeline-header-main">
+                  <CompanyLogo name={edu.school} logoUrl={edu.logoUrl} />
+                  <div>
+                    <h3 className="timeline-role">
+                      {edu.degree}
+                      {edu.field && (
+                        <span style={{ fontWeight: 400, color: 'var(--text-light)' }}> · {edu.field}</span>
+                      )}
+                    </h3>
+                    <div className="timeline-company" style={{ fontSize: '0.95rem' }}>{edu.school}</div>
+                    {edu.location && (
+                      <div className="timeline-location">
+                        <MapPin size={14} /> {edu.location}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="timeline-header-side">
+                  <span className="timeline-period">{edu.period}</span>
+                </div>
+              </div>
+
+              {edu.details && edu.details.length > 0 && (
+                <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+                  <ul className="timeline-details" style={{ marginBottom: 0 }}>
+                    {edu.details.map((d, i) => (
+                      <li key={i}>{d}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
