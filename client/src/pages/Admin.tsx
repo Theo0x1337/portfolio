@@ -217,28 +217,31 @@ export default function Admin() {
   };
 
   // ---- Markdown editor helpers ---------------------------------------------
-  const focusSelection = (from: number, to: number) => {
+  const focusSelection = (from: number, to: number, scrollTop?: number) => {
     requestAnimationFrame(() => {
       const ta = contentRef.current;
       if (!ta) return;
       ta.focus();
       ta.setSelectionRange(from, to);
+      // Restore the scroll position so inserting near the bottom doesn't jump
+      // the editor back to the top.
+      if (scrollTop !== undefined) ta.scrollTop = scrollTop;
     });
   };
 
   const insertAround = (before: string, after: string, placeholder: string) => {
     const ta = contentRef.current;
     if (!ta) return;
-    const { selectionStart: s, selectionEnd: e } = ta;
+    const { selectionStart: s, selectionEnd: e, scrollTop } = ta;
     const selected = content.slice(s, e) || placeholder;
     setContent(content.slice(0, s) + before + selected + after + content.slice(e));
-    focusSelection(s + before.length, s + before.length + selected.length);
+    focusSelection(s + before.length, s + before.length + selected.length, scrollTop);
   };
 
   const toggleLinePrefix = (prefix: string) => {
     const ta = contentRef.current;
     if (!ta) return;
-    const { selectionStart: s, selectionEnd: e } = ta;
+    const { selectionStart: s, selectionEnd: e, scrollTop } = ta;
     const lineStart = content.lastIndexOf('\n', s - 1) + 1;
     const nl = content.indexOf('\n', e);
     const lineEnd = nl === -1 ? content.length : nl;
@@ -246,19 +249,19 @@ export default function Admin() {
     const allOn = lines.every(l => l.startsWith(prefix));
     const block = lines.map(l => (allOn ? l.slice(prefix.length) : prefix + l)).join('\n');
     setContent(content.slice(0, lineStart) + block + content.slice(lineEnd));
-    focusSelection(lineStart, lineStart + block.length);
+    focusSelection(lineStart, lineStart + block.length, scrollTop);
   };
 
   const insertCodeBlock = () => {
     const ta = contentRef.current;
     if (!ta) return;
-    const { selectionStart: s, selectionEnd: e } = ta;
+    const { selectionStart: s, selectionEnd: e, scrollTop } = ta;
     const selected = content.slice(s, e) || 'code';
     const before = content.slice(0, s);
     const lead = before && !before.endsWith('\n') ? '\n' : '';
     setContent(before + lead + '```\n' + selected + '\n```' + content.slice(e));
     const from = s + lead.length + 4; // past the ```\n
-    focusSelection(from, from + selected.length);
+    focusSelection(from, from + selected.length, scrollTop);
   };
 
   const tools = [
@@ -283,15 +286,15 @@ export default function Admin() {
       e.preventDefault();
       const ta = contentRef.current;
       if (!ta) return;
-      const { selectionStart: s, selectionEnd: en } = ta;
+      const { selectionStart: s, selectionEnd: en, scrollTop } = ta;
       if (content.slice(s, en).includes('\n')) {
         const lineStart = content.lastIndexOf('\n', s - 1) + 1;
         const indented = content.slice(lineStart, en).split('\n').map(l => '  ' + l).join('\n');
         setContent(content.slice(0, lineStart) + indented + content.slice(en));
-        focusSelection(lineStart, lineStart + indented.length);
+        focusSelection(lineStart, lineStart + indented.length, scrollTop);
       } else {
         setContent(content.slice(0, s) + '  ' + content.slice(en));
-        focusSelection(s + 2, s + 2);
+        focusSelection(s + 2, s + 2, scrollTop);
       }
     }
   };
@@ -484,7 +487,14 @@ export default function Admin() {
                   <label className="admin-label" htmlFor="post-content">Markdown Content</label>
                   <div className="editor-toolbar">
                     {tools.map((t, i) => (
-                      <button type="button" key={i} title={t.title} onClick={t.run} tabIndex={-1}>
+                      <button
+                        type="button"
+                        key={i}
+                        title={t.title}
+                        onMouseDown={(e) => e.preventDefault()}
+                        onClick={t.run}
+                        tabIndex={-1}
+                      >
                         {t.icon}
                       </button>
                     ))}
