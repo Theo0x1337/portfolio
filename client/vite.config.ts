@@ -14,4 +14,13 @@ export default defineConfig({
       shared: fileURLToPath(new URL('../shared/src/index.ts', import.meta.url)),
     },
   },
+  server: {
+    watch: {
+      // The project lives on the Windows filesystem (/mnt/c) accessed from
+      // WSL2, where native inotify events don't fire — so HMR never triggers.
+      // Polling makes the watcher pick up changes reliably (costs a little CPU).
+      usePolling: true,
+      interval: 100,
+    },
+  },
 })
