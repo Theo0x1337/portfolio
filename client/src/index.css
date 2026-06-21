@@ -1089,10 +1089,107 @@ a:hover {
   gap: 32px;
 }
 
+/* Markdown formatting toolbar */
+.editor-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.editor-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  border-radius: 6px;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.editor-toolbar button:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background-color: var(--accent-light);
+}
+
+.editor-mono {
+  font-family: var(--mono-font) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6;
+  tab-size: 2;
+}
+
+/* Word count / excerpt counter row */
+.editor-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--text-light);
+}
+
+.editor-meta .over {
+  color: #E07A5F;
+  font-weight: 600;
+}
+
+.editor-warning {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #E07A5F;
+}
+
+/* Inline validation */
+.admin-input.invalid,
+.admin-textarea.invalid {
+  border-color: #E07A5F;
+  box-shadow: 0 0 0 3px rgba(224, 122, 95, 0.12);
+}
+
+/* Mobile Write / Preview toggle (hidden on desktop where both panes show) */
+.editor-view-toggle {
+  display: none;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.editor-view-toggle button {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid var(--border);
+  background-color: var(--bg);
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 500;
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.editor-view-toggle button.active {
+  background-color: var(--accent-light);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
 @media (max-width: 1024px) {
   .admin-editor-grid {
     grid-template-columns: 1fr;
     gap: 24px;
+  }
+  .editor-view-toggle {
+    display: flex;
+  }
+  .admin-editor-grid.view-write #post-editor-preview {
+    display: none;
+  }
+  .admin-editor-grid.view-preview #post-editor-form {
+    display: none;
   }
 }
 
