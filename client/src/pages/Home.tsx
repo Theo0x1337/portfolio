@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Database, Code, Layers, Terminal, Leaf, ExternalLink } from 'lucide-react';
+import { ArrowRight, Database, Code, Layers, Leaf, ExternalLink, Cloud, Workflow, ShieldCheck, Users } from 'lucide-react';
 import type { Project } from 'shared';
 
 const scenarios = [
@@ -221,24 +221,34 @@ export default function Home() {
 
   const skillsData = [
     {
-      category: 'Data & Cloud Stack',
-      icon: <Database size={20} />,
-      tags: ['GCP', 'BigQuery', 'DBT (Core)', 'Apache Airflow', 'Redis', 'Docker', 'Terraform', 'Pub/Sub', 'Cloud Functions']
+      category: 'Cloud & Data Warehouse',
+      icon: <Cloud size={20} />,
+      tags: ['Google Cloud (GCP)', 'BigQuery', 'Cloud Functions', 'Pub/Sub', 'Cloud Storage', 'Redis']
+    },
+    {
+      category: 'Transformation & Modeling',
+      icon: <Layers size={20} />,
+      tags: ['dbt (Core)', 'Dimensional Modeling (Kimball)', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
+    },
+    {
+      category: 'Orchestration & Infrastructure',
+      icon: <Workflow size={20} />,
+      tags: ['Apache Airflow', 'GitLab CI/CD', 'Docker', 'Terraform']
     },
     {
       category: 'Languages',
       icon: <Code size={20} />,
-      tags: ['Python', 'SQL (BigQuery/Postgres)', 'JavaScript', 'TypeScript', 'Bash/Shell']
+      tags: ['Python', 'SQL (BigQuery / Postgres)', 'TypeScript', 'JavaScript', 'Bash']
     },
     {
-      category: 'Engineering Practices',
-      icon: <Layers size={20} />,
-      tags: ['Data Architecture', 'ETL/ELT Design', 'Dimensional Modeling', 'Master Data Management', 'Data Governance']
+      category: 'Data Quality & Governance',
+      icon: <ShieldCheck size={20} />,
+      tags: ['Testing & Data Quality', 'Pipeline Observability', 'Data Lineage', 'Master Data Management', 'Data Governance']
     },
     {
-      category: 'Workflow & Agile',
-      icon: <Terminal size={20} />,
-      tags: ['GitLab CI/CD', 'Scrum Master', 'Mentoring / Tech Lead', 'Jira / Confluence']
+      category: 'Leadership & Delivery',
+      icon: <Users size={20} />,
+      tags: ['Tech Lead', 'Mentoring', 'Scrum / Agile', 'Code Reviews', 'Jira & Confluence']
     }
   ];
 
@@ -349,8 +359,8 @@ export default function Home() {
       <section className="section" id="skills-section">
         <div className="section-title-wrapper">
           <span className="section-tagline">Expertise</span>
-          <h2>Technical Skills & Practices</h2>
-          <p>My toolbelt is tailored around modern data engineering, cloud-native systems, and agile delivery.</p>
+          <h2>Engineering the Modern Data Stack</h2>
+          <p>The capabilities that turn raw operational data into trusted, decision-ready analytics: cloud warehousing, dbt modeling, orchestration, governance, and the team practices that ship it to production.</p>
         </div>
 
         <div className="skills-grid">
