@@ -228,7 +228,7 @@ export default function Home() {
     {
       category: 'Transformation & Modeling',
       icon: <Layers size={20} />,
-      tags: ['dbt (Core)', 'Dimensional Modeling', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
+      tags: ['DBT', 'Dimensional Modeling', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
     },
     {
       category: 'Orchestration & Infrastructure',
@@ -360,7 +360,7 @@ export default function Home() {
         <div className="section-title-wrapper">
           <span className="section-tagline">Expertise</span>
           <h2>Engineering the Modern Data Stack</h2>
-          <p>The capabilities that turn raw operational data into trusted, decision-ready analytics: cloud warehousing, dbt modeling, orchestration, governance, and the team practices that ship it to production.</p>
+          <p>The capabilities that turn raw operational data into trusted, decision-ready analytics: cloud warehousing, DBT modeling, orchestration, governance, and the team practices that ship it to production.</p>
         </div>
 
         <div className="skills-grid">
