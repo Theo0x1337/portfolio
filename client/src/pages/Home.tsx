@@ -50,9 +50,27 @@ const contactOutput = (
   </div>
 );
 
+const resumeOutput = (
+  <div className="terminal-contact">
+    <div className="terminal-contact-name">Theo Bernardin <span className="log-dim">— Lead Data Engineer</span></div>
+    <div className="log-dim">Resume / CV</div>
+    <div>
+      <span className="terminal-contact-label">download</span>
+      <a className="terminal-link" href="/resume.pdf" target="_blank" rel="noopener noreferrer" download>
+        resume.pdf
+      </a>
+    </div>
+    <div>
+      <span className="terminal-contact-label">online</span>
+      <Link className="terminal-link" to="/experience">full work history &amp; education &rarr;</Link>
+    </div>
+  </div>
+);
+
 const helpOutput = (
   <div>
     <div>Available commands:</div>
+    <div><span className="log-green">resume</span>  <span className="log-dim">— download my resume (CV)</span></div>
     <div><span className="log-green">contact</span> <span className="log-dim">— show how to reach me</span></div>
     <div><span className="log-green">help</span>    <span className="log-dim">— list commands</span></div>
     <div><span className="log-green">clear</span>   <span className="log-dim">— clear the screen</span></div>
@@ -101,7 +119,7 @@ export default function Home() {
     setIsInteractive(true);
     setInput(typedCommand);
     setHistory([
-      { type: 'output', node: <span className="log-dim">interactive shell — type 'contact' or 'help', then press Enter</span> }
+      { type: 'output', node: <span className="log-dim">interactive shell — type 'resume', 'contact' or 'help', then press Enter</span> }
     ]);
   };
 
@@ -114,6 +132,8 @@ export default function Home() {
     const entries: TerminalEntry[] = [{ type: 'command', node: <>$ {raw}</> }];
     if (cmd === '') {
       // just a new prompt
+    } else if (cmd === 'resume' || cmd === 'cv') {
+      entries.push({ type: 'output', node: resumeOutput });
     } else if (cmd === 'contact') {
       entries.push({ type: 'output', node: contactOutput });
     } else if (cmd === 'help') {
