@@ -269,13 +269,9 @@ export default function Experience() {
                       ))}
                     </ul>
 
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--accent)', marginRight: '4px' }}>Tech Stack:</span>
-                      {exp.stack.map((tech, techIdx) => (
-                        <span key={techIdx} className="project-tech-badge">
-                          {tech}
-                        </span>
-                      ))}
+                    <div className="timeline-stack">
+                      <span className="timeline-stack-label">Tech Stack:</span>{' '}
+                      {exp.stack.join(', ')}
                     </div>
                   </div>
                 )}
