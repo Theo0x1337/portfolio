@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Calendar, ArrowLeft, Clock } from 'lucide-react';
 import { seedPosts, type BlogPost } from 'shared';
 import MarkdownRenderer from '../components/MarkdownRenderer';
+import LogoSpinner from '../components/LogoSpinner';
 import { API_BASE } from '../config';
 
 // Offline fallback posts come from the shared seed data (single source of truth).
@@ -71,11 +72,7 @@ export default function Blog() {
   };
 
   if (loading) {
-    return (
-      <div className="container" style={{ textAlign: 'center', padding: '60px 0' }}>
-        <p>Loading blog content...</p>
-      </div>
-    );
+    return <LogoSpinner fullscreen label="Loading blog content" />;
   }
 
   // Reading view

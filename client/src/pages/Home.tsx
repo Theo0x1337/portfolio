@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Database, Code, Layers, Terminal, Leaf, ExternalLink } from 'lucide-react';
+import { ArrowRight, Database, Code, Layers, Leaf, ExternalLink, Cloud, Workflow, ShieldCheck, Users } from 'lucide-react';
 import type { Project } from 'shared';
 
 const scenarios = [
@@ -50,9 +50,27 @@ const contactOutput = (
   </div>
 );
 
+const resumeOutput = (
+  <div className="terminal-contact">
+    <div className="terminal-contact-name">Theo Bernardin <span className="log-dim">— Lead Data Engineer</span></div>
+    <div className="log-dim">Resume / CV</div>
+    <div>
+      <span className="terminal-contact-label">download</span>
+      <a className="terminal-link" href="/resume.pdf" target="_blank" rel="noopener noreferrer" download>
+        resume.pdf
+      </a>
+    </div>
+    <div>
+      <span className="terminal-contact-label">online</span>
+      <Link className="terminal-link" to="/experience">full work history &amp; education &rarr;</Link>
+    </div>
+  </div>
+);
+
 const helpOutput = (
   <div>
     <div>Available commands:</div>
+    <div><span className="log-green">resume</span>  <span className="log-dim">— download my resume (CV)</span></div>
     <div><span className="log-green">contact</span> <span className="log-dim">— show how to reach me</span></div>
     <div><span className="log-green">help</span>    <span className="log-dim">— list commands</span></div>
     <div><span className="log-green">clear</span>   <span className="log-dim">— clear the screen</span></div>
@@ -68,6 +86,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<TerminalEntry[]>([]);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const idleTimerRef = useRef<any>(null);
 
   const IDLE_TIMEOUT = 120000; // resume the demo after 2 min of inactivity
@@ -94,14 +113,21 @@ export default function Home() {
     }
   }, [visibleLogs, typedCommand, history, input]);
 
+  // Focus the input once interactive mode renders it (opens the mobile keyboard).
+  useEffect(() => {
+    if (isInteractive) inputRef.current?.focus();
+  }, [isInteractive]);
+
   const enterInteractive = () => {
-    terminalBodyRef.current?.focus();
     resetIdleTimer();
+    // Focusing a real <input> is what brings up the on-screen keyboard on
+    // mobile; a focused <div> does not. If already interactive, just refocus.
+    inputRef.current?.focus();
     if (isInteractive) return;
     setIsInteractive(true);
     setInput(typedCommand);
     setHistory([
-      { type: 'output', node: <span className="log-dim">interactive shell — type 'contact' or 'help', then press Enter</span> }
+      { type: 'output', node: <span className="log-dim">interactive shell — type 'resume', 'contact' or 'help', then press Enter</span> }
     ]);
   };
 
@@ -114,6 +140,8 @@ export default function Home() {
     const entries: TerminalEntry[] = [{ type: 'command', node: <>$ {raw}</> }];
     if (cmd === '') {
       // just a new prompt
+    } else if (cmd === 'resume' || cmd === 'cv') {
+      entries.push({ type: 'output', node: resumeOutput });
     } else if (cmd === 'contact') {
       entries.push({ type: 'output', node: contactOutput });
     } else if (cmd === 'help') {
@@ -127,19 +155,17 @@ export default function Home() {
     setHistory(prev => [...prev, ...entries]);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!isInteractive) return;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    resetIdleTimer();
+    setInput(e.target.value);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     resetIdleTimer();
     if (e.key === 'Enter') {
       e.preventDefault();
       runCommand(input);
       setInput('');
-    } else if (e.key === 'Backspace') {
-      e.preventDefault();
-      setInput(prev => prev.slice(0, -1));
-    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      setInput(prev => prev + e.key);
     }
   };
 
@@ -201,24 +227,34 @@ export default function Home() {
 
   const skillsData = [
     {
-      category: 'Data & Cloud Stack',
-      icon: <Database size={20} />,
-      tags: ['GCP', 'BigQuery', 'DBT (Core)', 'Apache Airflow', 'Redis', 'Docker', 'Terraform', 'Pub/Sub', 'Cloud Functions']
+      category: 'Cloud & Data Warehouse',
+      icon: <Cloud size={20} />,
+      tags: ['Google Cloud (GCP)', 'BigQuery', 'Cloud Functions', 'Pub/Sub', 'Cloud Storage', 'Redis']
+    },
+    {
+      category: 'Transformation & Modeling',
+      icon: <Layers size={20} />,
+      tags: ['DBT', 'Dimensional Modeling', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
+    },
+    {
+      category: 'Orchestration & Infrastructure',
+      icon: <Workflow size={20} />,
+      tags: ['Apache Airflow', 'GitLab CI/CD', 'Docker', 'Terraform']
     },
     {
       category: 'Languages',
       icon: <Code size={20} />,
-      tags: ['Python', 'SQL (BigQuery/Postgres)', 'JavaScript', 'TypeScript', 'Bash/Shell']
+      tags: ['Python', 'SQL (BigQuery / Postgres)', 'Java', 'TypeScript', 'JavaScript', 'Bash']
     },
     {
-      category: 'Engineering Practices',
-      icon: <Layers size={20} />,
-      tags: ['Data Architecture', 'ETL/ELT Design', 'Dimensional Modeling', 'Master Data Management', 'Data Governance']
+      category: 'Data Quality & Governance',
+      icon: <ShieldCheck size={20} />,
+      tags: ['Testing & Data Quality', 'Pipeline Observability', 'Data Lineage', 'Master Data Management', 'Data Governance']
     },
     {
-      category: 'Workflow & Agile',
-      icon: <Terminal size={20} />,
-      tags: ['GitLab CI/CD', 'Scrum Master', 'Mentoring / Tech Lead', 'Jira / Confluence']
+      category: 'Leadership & Delivery',
+      icon: <Users size={20} />,
+      tags: ['Tech Lead', 'Mentoring', 'Scrum / Agile', 'Code Reviews', 'Jira & Confluence']
     }
   ];
 
@@ -275,9 +311,7 @@ export default function Home() {
             <div
               ref={terminalBodyRef}
               className="terminal-body"
-              tabIndex={0}
               onClick={enterInteractive}
-              onKeyDown={handleKeyDown}
               style={{
                 opacity: isInteractive ? 1 : (isFadingOut ? 0 : 1),
                 transition: 'opacity 0.4s ease',
@@ -294,9 +328,21 @@ export default function Home() {
                       {entry.node}
                     </div>
                   ))}
-                  <div className="terminal-line command" style={{ opacity: 1, transform: 'none', animation: 'none' }}>
-                    $ {input}
-                    <span className="terminal-cursor"></span>
+                  <div className="terminal-line command terminal-input-line" style={{ opacity: 1, transform: 'none', animation: 'none' }}>
+                    <span className="terminal-prompt-sign">$</span>
+                    <input
+                      ref={inputRef}
+                      className="terminal-input"
+                      value={input}
+                      onChange={handleInputChange}
+                      onKeyDown={handleInputKeyDown}
+                      aria-label="Terminal command input"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck={false}
+                      enterKeyHint="go"
+                    />
                   </div>
                 </>
               ) : (
@@ -329,8 +375,8 @@ export default function Home() {
       <section className="section" id="skills-section">
         <div className="section-title-wrapper">
           <span className="section-tagline">Expertise</span>
-          <h2>Technical Skills & Practices</h2>
-          <p>My toolbelt is tailored around modern data engineering, cloud-native systems, and agile delivery.</p>
+          <h2>Engineering the Modern Data Stack</h2>
+          <p>The capabilities that turn raw operational data into trusted, decision-ready analytics: cloud warehousing, DBT modeling, orchestration, governance, and the team practices that ship it to production.</p>
         </div>
 
         <div className="skills-grid">
