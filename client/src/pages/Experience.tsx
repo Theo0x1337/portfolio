@@ -77,25 +77,14 @@ function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string }) {
   );
 }
 
-// A work entry plus optional headline metrics shown as stat chips.
-type ExperienceEntry = WorkExperience & {
-  metrics?: { value: string; label: string }[];
-};
-
 export default function Experience() {
-  const experiences: ExperienceEntry[] = [
+  const experiences: WorkExperience[] = [
     {
       role: 'Lead Data Engineer',
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
       location: 'Paris, France',
       logoUrl: logoDevUrl('carrefour.com'),
-      metrics: [
-        { value: '100B+', label: 'rows in production' },
-        { value: '100+ TB', label: 'data perimeter' },
-        { value: '99.6%', label: 'availability' },
-        { value: '~€36K/yr', label: 'compute saved' }
-      ],
       highlights: [
         'Own the data engineering for Carrefour France\'s entire Offer & Supply Chain perimeter, designing, deploying, and operating dozens of ETL/ELT pipelines on GCP/BigQuery (DBT Core) over 100B+ rows and 100+ TB at up to 99.6% availability.',
         'Architected a flagship Slowly Changing Dimension (SCD Type 2) pipeline consolidating 13 disparate source systems into one historically-accurate model of product assortment across hypermarkets, supermarkets, proximity stores, and warehouses, replacing a fragmented manual process with an audited single source of truth.',
@@ -110,9 +99,6 @@ export default function Experience() {
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
       location: 'Europe',
-      metrics: [
-        { value: '100+', label: 'professionals trained' }
-      ],
       highlights: [
         'Trained 100+ professionals upskilling or transitioning into the data field through continuing professional education programs.',
         'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines and architecture.'
@@ -139,9 +125,6 @@ export default function Experience() {
       period: 'May 2021 — Jul 2021',
       location: 'Vila Real, Portugal',
       logoUrl: logoDevUrl('utad.pt'),
-      metrics: [
-        { value: 'Elsevier', label: 'published paper' }
-      ],
       highlights: [
         'Conducted research on the early detection of grapevine leaf diseases using hyperspectral imaging data.',
         'Leveraged machine learning (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
@@ -252,17 +235,6 @@ export default function Experience() {
 
                 {isExpanded && (
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
-                    {exp.metrics && exp.metrics.length > 0 && (
-                      <p className="timeline-metrics-text">
-                        {exp.metrics.map((m, mIdx) => (
-                          <span key={mIdx}>
-                            {mIdx > 0 && <span className="timeline-metrics-sep"> · </span>}
-                            <span className="timeline-metric-value">{m.value}</span> {m.label}
-                          </span>
-                        ))}
-                      </p>
-                    )}
-
                     <ul className="timeline-details">
                       {exp.highlights.map((highlight, hIdx) => (
                         <li key={hIdx}>{highlightKeywords(highlight, keywords)}</li>

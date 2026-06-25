@@ -837,23 +837,6 @@ a:hover {
   margin-bottom: 16px;
 }
 
-/* Headline metrics as a plain text line at the top of an expanded experience */
-.timeline-metrics-text {
-  margin: 0 0 16px;
-  font-size: 0.9rem;
-  color: var(--text-light);
-  line-height: 1.7;
-}
-
-.timeline-metric-value {
-  font-weight: 700;
-  color: var(--accent);
-}
-
-.timeline-metrics-sep {
-  color: var(--border);
-}
-
 .timeline-stack {
   font-size: 0.9rem;
   color: var(--text-light);
