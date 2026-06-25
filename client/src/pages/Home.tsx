@@ -86,6 +86,7 @@ export default function Home() {
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<TerminalEntry[]>([]);
   const terminalBodyRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const idleTimerRef = useRef<any>(null);
 
   const IDLE_TIMEOUT = 120000; // resume the demo after 2 min of inactivity
@@ -112,9 +113,16 @@ export default function Home() {
     }
   }, [visibleLogs, typedCommand, history, input]);
 
+  // Focus the input once interactive mode renders it (opens the mobile keyboard).
+  useEffect(() => {
+    if (isInteractive) inputRef.current?.focus();
+  }, [isInteractive]);
+
   const enterInteractive = () => {
-    terminalBodyRef.current?.focus();
     resetIdleTimer();
+    // Focusing a real <input> is what brings up the on-screen keyboard on
+    // mobile; a focused <div> does not. If already interactive, just refocus.
+    inputRef.current?.focus();
     if (isInteractive) return;
     setIsInteractive(true);
     setInput(typedCommand);
@@ -147,19 +155,17 @@ export default function Home() {
     setHistory(prev => [...prev, ...entries]);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (!isInteractive) return;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    resetIdleTimer();
+    setInput(e.target.value);
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     resetIdleTimer();
     if (e.key === 'Enter') {
       e.preventDefault();
       runCommand(input);
       setInput('');
-    } else if (e.key === 'Backspace') {
-      e.preventDefault();
-      setInput(prev => prev.slice(0, -1));
-    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      e.preventDefault();
-      setInput(prev => prev + e.key);
     }
   };
 
@@ -305,9 +311,7 @@ export default function Home() {
             <div
               ref={terminalBodyRef}
               className="terminal-body"
-              tabIndex={0}
               onClick={enterInteractive}
-              onKeyDown={handleKeyDown}
               style={{
                 opacity: isInteractive ? 1 : (isFadingOut ? 0 : 1),
                 transition: 'opacity 0.4s ease',
@@ -324,9 +328,21 @@ export default function Home() {
                       {entry.node}
                     </div>
                   ))}
-                  <div className="terminal-line command" style={{ opacity: 1, transform: 'none', animation: 'none' }}>
-                    $ {input}
-                    <span className="terminal-cursor"></span>
+                  <div className="terminal-line command terminal-input-line" style={{ opacity: 1, transform: 'none', animation: 'none' }}>
+                    <span className="terminal-prompt-sign">$</span>
+                    <input
+                      ref={inputRef}
+                      className="terminal-input"
+                      value={input}
+                      onChange={handleInputChange}
+                      onKeyDown={handleInputKeyDown}
+                      aria-label="Terminal command input"
+                      autoCapitalize="none"
+                      autoCorrect="off"
+                      autoComplete="off"
+                      spellCheck={false}
+                      enterKeyHint="go"
+                    />
                   </div>
                 </>
               ) : (

@@ -495,6 +495,39 @@ a:hover {
   animation: cursorBlink 1s step-end infinite;
 }
 
+/* Interactive prompt: a real <input> so mobile keyboards open and typing works.
+   Styled to blend into the terminal; the native blinking caret replaces the
+   custom cursor span. */
+.terminal-input-line {
+  display: flex;
+  align-items: center;
+}
+
+.terminal-prompt-sign {
+  margin-right: 8px;
+  flex: none;
+}
+
+.terminal-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  caret-color: #f7a04a;
+}
+
+/* On touch devices, a sub-16px field makes iOS zoom in on focus. Bump it up. */
+@media (pointer: coarse) {
+  .terminal-input {
+    font-size: 16px;
+  }
+}
+
 @keyframes terminalLineFade {
   from {
     opacity: 0;
