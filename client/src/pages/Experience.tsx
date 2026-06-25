@@ -20,7 +20,8 @@ const TECH_KEYWORDS = [
   'Apache Airflow', 'Airflow', 'GitLab CI/CD', 'Docker',
   'JavaScript', 'TypeScript', 'Scikit-learn', 'PCA',
   'machine learning', 'hyperspectral', 'blockchain',
-  'Scrum Master', 'Agile', 'data modeling', 'dimensionality reduction'
+  'Scrum Master', 'Agile', 'data modeling', 'dimensionality reduction',
+  'SCD Type 2', 'ETL/ELT', 'single source of truth', 'Confluence'
 ];
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -76,31 +77,45 @@ function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string }) {
   );
 }
 
+// A work entry plus optional headline metrics shown as stat chips.
+type ExperienceEntry = WorkExperience & {
+  metrics?: { value: string; label: string }[];
+};
+
 export default function Experience() {
-  const experiences: WorkExperience[] = [
+  const experiences: ExperienceEntry[] = [
     {
       role: 'Lead Data Engineer',
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
       location: 'Paris, France',
       logoUrl: logoDevUrl('carrefour.com'),
-      highlights: [
-        'Define the target technical vision and development standards, implementing engineering best practices and conducting code reviews to maintain technical excellence.',
-        'Design, deploy, and maintain complex DBT data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using DBT Core and a custom Carrefour framework.',
-        'Structure the analytics architecture, manage data quality through rigorous testing and monitoring, and optimize SQL queries to reduce computing costs.',
-        'Serve as Scrum Master for a 10-person squad: lead Agile ceremonies (Daily, Sprint Planning, Retrospectives, Backlog Refinement), resolve workflow impediments, and track squad delivery velocity.',
-        'Provide technical guidance to developers during onboarding and translate business requirements from stakeholders into scalable data solutions.'
+      metrics: [
+        { value: '100B+', label: 'rows in production' },
+        { value: '100+ TB', label: 'data perimeter' },
+        { value: '99.6%', label: 'availability' },
+        { value: '~€36K/yr', label: 'compute saved' }
       ],
-      stack: ['SQL', 'DBT Core', 'Python', 'GCP', 'Apache Airflow', 'GitLab CI/CD', 'Jira']
+      highlights: [
+        'Own the data engineering for Carrefour France\'s entire Offer & Supply Chain perimeter, designing, deploying, and operating dozens of ETL/ELT pipelines on GCP/BigQuery (DBT Core) over 100B+ rows and 100+ TB at up to 99.6% availability.',
+        'Architected a flagship Slowly Changing Dimension (SCD Type 2) pipeline consolidating 13 disparate source systems into one historically-accurate model of product assortment across hypermarkets, supermarkets, proximity stores, and warehouses, replacing a fragmented manual process with an audited single source of truth.',
+        'Engineered custom delta-detection and early-exit logic plus heavy SQL tuning across pipelines, cutting BigQuery compute cost by ~20% (~€100/day, ~€36K/year) while sustaining 20-minute refresh cadences.',
+        'Built automated fallback mechanisms and real-time alerting that prevent data loss and duplication across failed runs, keeping critical store and warehouse operations continuously supplied with fresh data.',
+        'As Tech Lead and Scrum Master, set the technical vision and engineering standards, run code reviews, mentor and onboard 5 engineers (3 as direct reports), and lead Agile ceremonies for a 10-person squad.'
+      ],
+      stack: ['SQL', 'DBT Core', 'Python', 'GCP', 'BigQuery', 'Apache Airflow', 'GitLab CI/CD', 'Jira', 'Confluence']
     },
     {
       role: 'Independent Data Instructor',
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
       location: 'Europe',
+      metrics: [
+        { value: '100+', label: 'professionals trained' }
+      ],
       highlights: [
-        'Deliver continuing professional education programs for adults upskilling or transitioning into the data field.',
-        'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines/architecture.'
+        'Trained 100+ professionals upskilling or transitioning into the data field through continuing professional education programs.',
+        'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines and architecture.'
       ],
       stack: ['Python', 'SQL', 'Algorithms', 'Scientific Computing', 'Data Visualization']
     },
@@ -112,7 +127,7 @@ export default function Experience() {
       logoUrl: logoDevUrl('opcodes.fr'),
       highlights: [
         'Reverse-engineered existing data pipelines and ingestion scripts in Python to extract relevant transaction data from blockchain logs.',
-        'Structured and stored large volumes of transaction data efficiently into Google BigQuery database tables.',
+        'Structured and stored large volumes of blockchain transaction data efficiently into Google BigQuery tables.',
         'Performed data cleaning, transformation, and aggregation to prepare transaction insights for downstream consumption.',
         'Built and refined dynamic dashboard components to explore transaction patterns and user behaviors.'
       ],
@@ -124,10 +139,13 @@ export default function Experience() {
       period: 'May 2021 — Jul 2021',
       location: 'Vila Real, Portugal',
       logoUrl: logoDevUrl('utad.pt'),
+      metrics: [
+        { value: 'Elsevier', label: 'published paper' }
+      ],
       highlights: [
-        'Conducted research on the early detection of plant grapevine leaf diseases using hyperspectral imaging data.',
-        'Leveraged machine learning techniques (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
-        'Co-authored and published research paper: "Automatic detection of Flavescence dorée grapevine disease in hyperspectral images using machine learning" in Elsevier\'s Procedia Computer Science.'
+        'Conducted research on the early detection of grapevine leaf diseases using hyperspectral imaging data.',
+        'Leveraged machine learning (Scikit-learn, PCA) to identify early symptoms and reduce data dimensionality for more efficient processing and storage.',
+        'Co-authored and published "Automatic detection of Flavescence dorée grapevine disease in hyperspectral images using machine learning" in Elsevier\'s Procedia Computer Science.'
       ],
       stack: ['Python', 'Scikit-Learn', 'PCA', 'Hyperspectral Sensors', 'Machine Learning']
     }
@@ -197,7 +215,7 @@ export default function Experience() {
       <div className="section-title-wrapper">
         <span className="section-tagline">Career Path</span>
         <h2>Professional Experience</h2>
-        <p>A timeline of my professional roles, tech stacks, and key accomplishments in data engineering and data science.</p>
+        <p>Over 4 years building and operating data platforms across retail, blockchain, and research. A timeline of my roles, with the key metrics, systems, and stacks behind each.</p>
       </div>
 
       <div className="timeline" id="experience-timeline">
@@ -234,6 +252,17 @@ export default function Experience() {
 
                 {isExpanded && (
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
+                    {exp.metrics && exp.metrics.length > 0 && (
+                      <div className="timeline-metrics">
+                        {exp.metrics.map((m, mIdx) => (
+                          <div className="timeline-metric" key={mIdx}>
+                            <span className="timeline-metric-value">{m.value}</span>
+                            <span className="timeline-metric-label">{m.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
                     <ul className="timeline-details">
                       {exp.highlights.map((highlight, hIdx) => (
                         <li key={hIdx}>{highlightKeywords(highlight, keywords)}</li>

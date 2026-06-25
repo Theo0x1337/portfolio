@@ -837,6 +837,38 @@ a:hover {
   margin-bottom: 16px;
 }
 
+/* Headline metric chips at the top of an expanded experience */
+.timeline-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.timeline-metric {
+  flex: 1 1 130px;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  background: var(--accent-light);
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+}
+
+.timeline-metric-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.timeline-metric-label {
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
 .timeline-details {
   padding-left: 18px;
   margin: 0 0 20px;
