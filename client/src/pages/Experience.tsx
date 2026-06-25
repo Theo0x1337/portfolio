@@ -253,14 +253,14 @@ export default function Experience() {
                 {isExpanded && (
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
                     {exp.metrics && exp.metrics.length > 0 && (
-                      <div className="timeline-metrics">
+                      <p className="timeline-metrics-text">
                         {exp.metrics.map((m, mIdx) => (
-                          <div className="timeline-metric" key={mIdx}>
-                            <span className="timeline-metric-value">{m.value}</span>
-                            <span className="timeline-metric-label">{m.label}</span>
-                          </div>
+                          <span key={mIdx}>
+                            {mIdx > 0 && <span className="timeline-metrics-sep"> · </span>}
+                            <span className="timeline-metric-value">{m.value}</span> {m.label}
+                          </span>
                         ))}
-                      </div>
+                      </p>
                     )}
 
                     <ul className="timeline-details">
