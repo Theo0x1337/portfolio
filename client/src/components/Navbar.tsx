@@ -2,6 +2,34 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 
+function LogoMark() {
+  return (
+    <svg
+      className="navbar-logo-mark"
+      viewBox="0 0 64 64"
+      width="26"
+      height="26"
+      role="img"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <g fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round">
+        <path d="M16 17 L32 32" />
+        <path d="M16 47 L32 32" />
+        <path d="M32 32 L48 17" />
+        <path d="M32 32 L48 47" />
+      </g>
+      <g fill="currentColor">
+        <circle cx="16" cy="17" r="5" />
+        <circle cx="16" cy="47" r="5" />
+        <circle cx="32" cy="32" r="6.5" />
+        <circle cx="48" cy="17" r="5" />
+        <circle cx="48" cy="47" r="5" />
+      </g>
+    </svg>
+  );
+}
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const close = () => setIsOpen(false);
@@ -10,6 +38,7 @@ export default function Navbar() {
     <nav className="navbar" id="site-nav">
       <div className="container navbar-container">
         <NavLink to="/" className="navbar-logo" id="nav-logo-link" onClick={close}>
+          <LogoMark />
           theo0x1337<span>.dev</span>
         </NavLink>
 

@@ -14,9 +14,9 @@ interface EducationEntry {
 
 // Tech/stack keywords highlighted inside the job descriptions. Curated so the
 // terms actually appear in the prose below (longer terms first so e.g.
-// "dbt Core" wins over "dbt").
+// "DBT Core" wins over "DBT").
 const TECH_KEYWORDS = [
-  'dbt Core', 'dbt', 'BigQuery', 'GCP', 'SQL', 'Python',
+  'DBT Core', 'DBT', 'BigQuery', 'GCP', 'SQL', 'Python',
   'Apache Airflow', 'Airflow', 'GitLab CI/CD', 'Docker',
   'JavaScript', 'TypeScript', 'Scikit-learn', 'PCA',
   'machine learning', 'hyperspectral', 'blockchain',
@@ -82,22 +82,22 @@ export default function Experience() {
       role: 'Lead Data Engineer',
       company: 'Carrefour',
       period: 'Apr 2023 — Present',
-      location: 'France (Open to Relocation)',
+      location: 'Paris, France',
       logoUrl: logoDevUrl('carrefour.com'),
       highlights: [
         'Define the target technical vision and development standards, implementing engineering best practices and conducting code reviews to maintain technical excellence.',
-        'Design, deploy, and maintain complex dbt data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using dbt Core and a custom Carrefour framework.',
+        'Design, deploy, and maintain complex DBT data pipelines for supply chain and offer data, performing advanced data modeling and transformations in BigQuery using DBT Core and a custom Carrefour framework.',
         'Structure the analytics architecture, manage data quality through rigorous testing and monitoring, and optimize SQL queries to reduce computing costs.',
         'Serve as Scrum Master for a 10-person squad: lead Agile ceremonies (Daily, Sprint Planning, Retrospectives, Backlog Refinement), resolve workflow impediments, and track squad delivery velocity.',
         'Provide technical guidance to developers during onboarding and translate business requirements from stakeholders into scalable data solutions.'
       ],
-      stack: ['SQL', 'dbt Core', 'Python', 'GCP', 'Apache Airflow', 'GitLab CI/CD', 'Jira']
+      stack: ['SQL', 'DBT Core', 'Python', 'GCP', 'Apache Airflow', 'GitLab CI/CD', 'Jira']
     },
     {
       role: 'Independent Data Instructor',
       company: 'Self-employed',
       period: 'Apr 2024 — Present',
-      location: 'France',
+      location: 'Europe',
       highlights: [
         'Deliver continuing professional education programs for adults upskilling or transitioning into the data field.',
         'Instruct core modules covering foundational algorithms (logic and problem-solving), scientific computing (data manipulation, numerical analysis), data visualization, and data engineering pipelines/architecture.'
@@ -108,7 +108,7 @@ export default function Experience() {
       role: 'Data Engineer',
       company: 'OPCODES',
       period: 'Mar 2022 — Apr 2023',
-      location: 'France',
+      location: 'Paris, France',
       logoUrl: logoDevUrl('opcodes.fr'),
       highlights: [
         'Reverse-engineered existing data pipelines and ingestion scripts in Python to extract relevant transaction data from blockchain logs.',
@@ -140,22 +140,40 @@ export default function Experience() {
       school: 'Polytech Annecy-Chambéry · Université Savoie Mont Blanc (USMB)',
       period: '2019 — 2022',
       location: 'Annecy, France',
-      logoUrl: logoDevUrl('univ-smb.fr')
+      logoUrl: logoDevUrl('univ-smb.fr'),
+      details: [
+        'Software & IT: object-oriented design and programming (Python, C), algorithmics, databases, operating systems, virtualization and distributed networks.',
+        'Data & AI: machine learning, statistical analysis, Big Data, concurrent data flows, data quality and governance for decision support.',
+        'Science & maths: discrete mathematics, probability, statistics, optimization, cryptography and stochastic modelling.',
+        'Engineering & professional: project management, sustainable engineering and English (TOEIC), with internships and a research thesis.'
+      ]
     },
     {
       degree: 'Exchange Program',
-      field: 'Computer Science',
+      field: 'Computer Science & Data',
       school: 'Babeș-Bolyai University',
       period: '2021 — 2022',
       location: 'Cluj-Napoca, Romania',
-      logoUrl: logoDevUrl('ubbcluj.ro')
+      logoUrl: logoDevUrl('ubbcluj.ro'),
+      details: [
+        'High-performance computing: CUDA development and distributed programming.',
+        'Data & AI: natural language processing and Big Data.',
+        'Science & maths: graph theory.'
+      ]
     },
     {
-      degree: 'Associate Degree in Computer Science — DUT Informatique',
+      degree: 'Associate Degree — DUT Informatique',
+      field: 'Computer Science',
       school: 'Université de Lorraine',
       period: '2017 — 2019',
-      location: 'France',
-      logoUrl: logoDevUrl('univ-lorraine.fr')
+      location: 'Nancy, France',
+      logoUrl: logoDevUrl('univ-lorraine.fr'),
+      details: [
+        'Software development: object-oriented & web programming, application architecture, software quality and maintenance.',
+        'Data: relational and NoSQL databases, SQL, data modelling and exploitation.',
+        'Systems & networks: systems and network administration, virtualization, cloud computing, cybersecurity fundamentals.',
+        'Science & maths: discrete mathematics, probability, graph theory, algorithmics and optimization.'
+      ]
     }
   ];
 

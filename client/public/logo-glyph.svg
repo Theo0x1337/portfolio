@@ -1,12 +1,11 @@
-<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="theo0x1337">
-  <rect width="64" height="64" rx="14" fill="#C85A32"/>
-  <g fill="none" stroke="#FAF9F6" stroke-width="4" stroke-linecap="round">
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="theo0x1337 glyph">
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
     <path d="M16 17 L32 32"/>
     <path d="M16 47 L32 32"/>
     <path d="M32 32 L48 17"/>
     <path d="M32 32 L48 47"/>
   </g>
-  <g fill="#FAF9F6">
+  <g fill="currentColor">
     <circle cx="16" cy="17" r="5"/>
     <circle cx="16" cy="47" r="5"/>
     <circle cx="32" cy="32" r="6.5"/>

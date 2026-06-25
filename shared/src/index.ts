@@ -32,6 +32,7 @@ export interface Project {
   stack: string[];
   githubUrl?: string;
   demoUrl?: string;
+  demoLabel?: string;
   imageUrl?: string;
 }
 
@@ -43,18 +44,18 @@ export const seedPosts: BlogPost[] = [
     id: '1',
     title: 'Building a Resilient SCD Type 2 Pipeline in BigQuery',
     slug: 'resilient-scd-type-2-pipeline-bigquery',
-    excerpt: 'A deep dive into implementing Slowly Changing Dimensions (SCD) Type 2 in Google BigQuery using dbt and merge statements, with cost optimization in mind.',
+    excerpt: 'A deep dive into implementing Slowly Changing Dimensions (SCD) Type 2 in Google BigQuery using DBT and merge statements, with cost optimization in mind.',
     content: `# Building a Resilient SCD Type 2 Pipeline in BigQuery
 
 When managing master data in a modern data lakehouse like BigQuery, tracking historical changes is crucial. Slowly Changing Dimensions (SCD) Type 2 is the gold standard for preserving history, but running full table scans on BigQuery can quickly become expensive.
 
-In this article, we'll explore how to leverage **dbt** (Data Build Tool) snapshot features alongside custom partition strategies to build a highly optimized, cost-efficient, and resilient SCD Type 2 pipeline.
+In this article, we'll explore how to leverage **DBT** (Data Build Tool) snapshot features alongside custom partition strategies to build a highly optimized, cost-efficient, and resilient SCD Type 2 pipeline.
 
 ## The Challenge
 BigQuery is a columnar storage engine where you pay for the number of bytes scanned. Traditional SCD Type 2 updates involve comparing the new data stream against the entire target table to detect updates and inserts. If your history spans hundreds of millions of rows, scanning this daily is a cost bottleneck.
 
-## The Solution: dbt Snapshots + Partitions
-dbt snapshots make capturing changed rows simple. Under the hood, dbt uses a \`MERGE\` statement. By configuring our target snapshot table to be partitioned by a date field (e.g., \`dbt_updated_at\`), we can drastically limit the query scan volume.
+## The Solution: DBT Snapshots + Partitions
+DBT snapshots make capturing changed rows simple. Under the hood, DBT uses a \`MERGE\` statement. By configuring our target snapshot table to be partitioned by a date field (e.g., \`dbt_updated_at\`), we can drastically limit the query scan volume.
 
 \`\`\`sql
 -- Example of a dbt snapshot configuration
@@ -77,7 +78,7 @@ select * from {{ source('raw_store', 'orders') }}
 
 ## Monitoring and Data Quality
 To ensure our pipeline is resilient:
-1. **Primary Key Uniqueness:** Run dbt tests (\`unique\`, \`not_null\`) on \`unique_key\` to prevent duplicates.
+1. **Primary Key Uniqueness:** Run DBT tests (\`unique\`, \`not_null\`) on \`unique_key\` to prevent duplicates.
 2. **Gap Detection:** Ensure that for any record, \`dbt_valid_to\` of version N equals \`dbt_valid_from\` of version N+1.
 
 In the next post, we will look into cost-optimizing BigQuery storage models using physical clustering keys.`,
