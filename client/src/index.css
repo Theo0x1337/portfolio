@@ -153,36 +153,6 @@ a:hover {
   align-items: center;
 }
 
-@media (max-width: 640px) {
-  .navbar-toggle {
-    display: inline-flex;
-  }
-
-  .navbar-menu {
-    display: none;
-    position: absolute;
-    top: 72px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    padding: 8px 24px 16px;
-    background-color: var(--card-bg);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-md);
-  }
-
-  .navbar-menu.open {
-    display: flex;
-  }
-
-  .navbar-menu .navbar-link {
-    width: 100%;
-    padding: 12px 0;
-  }
-}
-
 .navbar-logo {
   font-family: var(--heading-font);
   font-size: 1.35rem;
@@ -235,6 +205,40 @@ a:hover {
   height: 2px;
   background-color: var(--accent);
   border-radius: 2px;
+}
+
+/* Mobile nav: collapse the menu behind the toggle.
+   Placed after the base .navbar-menu rules so these win by source order
+   (equal specificity), otherwise the desktop display:flex would force the
+   menu open and the toggle could never hide it. */
+@media (max-width: 640px) {
+  .navbar-toggle {
+    display: inline-flex;
+  }
+
+  .navbar-menu {
+    display: none;
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 8px 24px 16px;
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+  }
+
+  .navbar-menu.open {
+    display: flex;
+  }
+
+  .navbar-menu .navbar-link {
+    width: 100%;
+    padding: 12px 0;
+  }
 }
 
 /* Buttons */

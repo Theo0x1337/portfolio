@@ -238,7 +238,7 @@ export default function Home() {
     {
       category: 'Languages',
       icon: <Code size={20} />,
-      tags: ['Python', 'SQL (BigQuery / Postgres)', 'TypeScript', 'JavaScript', 'Bash']
+      tags: ['Python', 'SQL (BigQuery / Postgres)', 'Java', 'TypeScript', 'JavaScript', 'Bash']
     },
     {
       category: 'Data Quality & Governance',
