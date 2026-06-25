@@ -579,8 +579,22 @@ a:hover {
 /* Skills Matrix */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* Fixed 3 columns so the 6 cards form an even 3x2 block instead of leaving
+     orphan cards on a half-empty row. Steps down to 2, then 1, on smaller screens. */
+  grid-template-columns: repeat(3, 1fr);
   gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .skill-category {

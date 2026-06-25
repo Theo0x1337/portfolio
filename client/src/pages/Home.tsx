@@ -228,7 +228,7 @@ export default function Home() {
     {
       category: 'Transformation & Modeling',
       icon: <Layers size={20} />,
-      tags: ['dbt (Core)', 'Dimensional Modeling (Kimball)', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
+      tags: ['dbt (Core)', 'Dimensional Modeling', 'SCD Type 2', 'ELT / ETL Design', 'Data Architecture']
     },
     {
       category: 'Orchestration & Infrastructure',
