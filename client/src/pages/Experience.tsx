@@ -21,7 +21,7 @@ const TECH_KEYWORDS = [
   'JavaScript', 'TypeScript', 'Scikit-learn', 'PCA',
   'machine learning', 'hyperspectral', 'blockchain',
   'Scrum Master', 'Agile', 'data modeling', 'dimensionality reduction',
-  'SCD Type 2', 'ETL/ELT', 'single source of truth', 'Confluence'
+  'Google Cloud Platform', 'Confluence'
 ];
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -80,19 +80,55 @@ function CompanyLogo({ name, logoUrl }: { name: string; logoUrl?: string }) {
 export default function Experience() {
   const experiences: WorkExperience[] = [
     {
-      role: 'Lead Data Engineer',
+      role: 'Tech Lead',
       company: 'Carrefour',
-      period: 'Apr 2023 — Present',
-      location: 'Paris, France',
+      period: 'Mar 2026 — Present',
+      location: 'Lyon, France',
+      logoUrl: logoDevUrl('carrefour.com'),
+      summary: 'Within the Phenix team, a central hub providing data across Carrefour France and various group entities, I\'m responsible for the design, optimization, and management of data architectures to meet the strategic and operational challenges of the retail sector. Focusing on supply chain and offer data, I hold a high-responsibility hybrid role built around three core pillars:',
+      highlights: [],
+      highlightGroups: [
+        {
+          title: 'Tech Lead',
+          items: [
+            'Target Architecture: Defining the technical vision and development standards for the team.',
+            'Quality Assurance: Implementing engineering best practices, conducting code reviews, and maintaining technical excellence.',
+            'Business Interface: Translating complex requirements from stakeholders and Product Owners into viable, robust, and scalable technical solutions.',
+            'Mentoring: Providing technical guidance to developers, fostering their skill growth, and driving their onboarding onto the platform.'
+          ]
+        },
+        {
+          title: 'Lead Data Engineer',
+          items: [
+            'GCP Ecosystem: Designing, deploying, and maintaining complex data pipelines leveraging Google Cloud Platform services.',
+            'Analytics Engineering & Transformation: Performing advanced data modeling and transformation using dbt Core alongside a custom Carrefour framework.',
+            'Governance & Optimization: Structuring the analytics architecture, managing data quality through rigorous testing and monitoring within BigQuery, and optimizing SQL queries to reduce costs.'
+          ]
+        },
+        {
+          title: 'Scrum Master',
+          items: [
+            'Ritual Management: Leading Agile ceremonies (Daily, Sprint Planning, Retrospectives, Sprint Reviews, Backlog Refinement).',
+            'Facilitation: Identifying, communicating, and resolving blockers (impediments) to streamline the team\'s workflow.',
+            'Continuous Improvement: Tracking velocity, optimizing delivery processes, and maximizing value creation at every iteration.'
+          ]
+        }
+      ],
+      stack: ['GCP', 'BigQuery', 'dbt Core', 'Python', 'SQL', 'Apache Airflow', 'GitLab CI/CD', 'Jira', 'Confluence']
+    },
+    {
+      role: 'Data Engineer',
+      company: 'Carrefour',
+      period: 'Apr 2023 — Mar 2026',
+      location: 'Lyon, France',
       logoUrl: logoDevUrl('carrefour.com'),
       highlights: [
-        'Own the data engineering for Carrefour France\'s entire Offer & Supply Chain perimeter, designing, deploying, and operating dozens of ETL/ELT pipelines on GCP/BigQuery (DBT Core) over 100B+ rows and 100+ TB at up to 99.6% availability.',
-        'Architected a flagship Slowly Changing Dimension (SCD Type 2) pipeline consolidating 13 disparate source systems into one historically-accurate model of product assortment across hypermarkets, supermarkets, proximity stores, and warehouses, replacing a fragmented manual process with an audited single source of truth.',
-        'Engineered custom delta-detection and early-exit logic plus heavy SQL tuning across pipelines, cutting BigQuery compute cost by ~20% (~€100/day, ~€36K/year) while sustaining 20-minute refresh cadences.',
-        'Built automated fallback mechanisms and real-time alerting that prevent data loss and duplication across failed runs, keeping critical store and warehouse operations continuously supplied with fresh data.',
-        'As Tech Lead and Scrum Master, set the technical vision and engineering standards, run code reviews, mentor and onboard 5 engineers (3 as direct reports), and lead Agile ceremonies for a 10-person squad.'
+        'Data Pipeline Development: Built, deployed, and maintained production-grade data pipelines on Google Cloud Platform (GCP) to process complex Supply Chain and Offer datasets.',
+        'Analytics Engineering: Developed and maintained scalable data transformation models using dbt Core and Python, adhering to Carrefour\'s internal framework and governance guidelines.',
+        'Data Quality & Performance: Implemented automated data quality tests, monitored pipeline health in BigQuery, and optimized SQL queries to improve execution speed and lower compute costs.',
+        'Agile Execution: Actively participated in Scrum ceremonies, consistently delivering sprint commitments, contributing to technical documentation in Confluence, and collaborating closely with Senior Engineers and Product Owners.'
       ],
-      stack: ['SQL', 'DBT Core', 'Python', 'GCP', 'BigQuery', 'Apache Airflow', 'GitLab CI/CD', 'Jira', 'Confluence']
+      stack: ['GCP', 'BigQuery', 'dbt Core', 'Python', 'SQL', 'Apache Airflow', 'GitLab CI/CD', 'Jira', 'Confluence']
     },
     {
       role: 'Independent Data Instructor',
@@ -178,19 +214,57 @@ export default function Experience() {
     }
   ];
 
-  // State to track which items are expanded (initially all expanded)
-  const [expandedIndex, setExpandedIndex] = useState<Record<number, boolean>>({
-    0: true,
-    1: true,
-    2: true,
-    3: true
-  });
+  // State to track which items are expanded (missing entries default to expanded)
+  const [expandedIndex, setExpandedIndex] = useState<Record<number, boolean>>({});
 
   const toggleExpand = (index: number) => {
     setExpandedIndex(prev => ({
       ...prev,
-      [index]: !prev[index]
+      [index]: !(prev[index] ?? true)
     }));
+  };
+
+  // Consecutive roles at the same company are grouped into one card.
+  const companyGroups = experiences.reduce<WorkExperience[][]>((groups, exp) => {
+    const last = groups[groups.length - 1];
+    if (last && last[0].company === exp.company) last.push(exp);
+    else groups.push([exp]);
+    return groups;
+  }, []);
+
+  const renderRoleBody = (exp: WorkExperience) => {
+    // Highlight the job's own stack plus the shared tech glossary.
+    const keywords = [...exp.stack, ...TECH_KEYWORDS];
+    const renderBullet = (text: string, key: number) => (
+      <li key={key}>{highlightKeywords(text, keywords)}</li>
+    );
+    return (
+      <>
+        {exp.summary && (
+          <p className="timeline-summary">{highlightKeywords(exp.summary, keywords)}</p>
+        )}
+
+        {exp.highlights.length > 0 && (
+          <ul className="timeline-details">
+            {exp.highlights.map(renderBullet)}
+          </ul>
+        )}
+
+        {exp.highlightGroups?.map((group, gIdx) => (
+          <div className="timeline-group" key={gIdx}>
+            <h5 className="timeline-group-title">{gIdx + 1}. {group.title}</h5>
+            <ul className="timeline-details">
+              {group.items.map(renderBullet)}
+            </ul>
+          </div>
+        ))}
+
+        <div className="timeline-stack">
+          <span className="timeline-stack-label">Tech Stack:</span>{' '}
+          {exp.stack.join(', ')}
+        </div>
+      </>
+    );
   };
 
   return (
@@ -202,10 +276,16 @@ export default function Experience() {
       </div>
 
       <div className="timeline" id="experience-timeline">
-        {experiences.map((exp, idx) => {
-          const isExpanded = expandedIndex[idx];
-          // Highlight the job's own stack plus the shared tech glossary.
-          const keywords = [...exp.stack, ...TECH_KEYWORDS];
+        {companyGroups.map((roles, idx) => {
+          const isExpanded = expandedIndex[idx] ?? true;
+          const [first] = roles;
+          // Several roles at one company share a single card (LinkedIn-style),
+          // titled with the current role and spanning from the oldest role's
+          // start to the latest role's end.
+          const isMultiRole = roles.length > 1;
+          const period = isMultiRole
+            ? `${roles[roles.length - 1].period.split(' — ')[0]} — ${first.period.split(' — ')[1]}`
+            : first.period;
           return (
             <div className="timeline-item" key={idx}>
               <div className="timeline-marker"></div>
@@ -217,34 +297,39 @@ export default function Experience() {
                   style={{ cursor: 'pointer' }}
                 >
                   <div className="timeline-header-main">
-                    <CompanyLogo name={exp.company} logoUrl={exp.logoUrl} />
+                    <CompanyLogo name={first.company} logoUrl={first.logoUrl} />
                     <div>
                       <h3 className="timeline-role">
-                        {exp.role} <span style={{ fontWeight: 400, color: 'var(--text-light)' }}>at</span> <span className="timeline-company">{exp.company}</span>
+                        {first.role} <span style={{ fontWeight: 400, color: 'var(--text-light)' }}>at</span> <span className="timeline-company">{first.company}</span>
                       </h3>
                       <div className="timeline-location">
-                        <MapPin size={14} /> {exp.location}
+                        <MapPin size={14} /> {first.location}
                       </div>
                     </div>
                   </div>
                   <div className="timeline-header-side">
-                    <span className="timeline-period">{exp.period}</span>
+                    <span className="timeline-period">{period}</span>
                     {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                   </div>
                 </div>
 
                 {isExpanded && (
                   <div style={{ marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '16px' }}>
-                    <ul className="timeline-details">
-                      {exp.highlights.map((highlight, hIdx) => (
-                        <li key={hIdx}>{highlightKeywords(highlight, keywords)}</li>
-                      ))}
-                    </ul>
-
-                    <div className="timeline-stack">
-                      <span className="timeline-stack-label">Tech Stack:</span>{' '}
-                      {exp.stack.join(', ')}
-                    </div>
+                    {isMultiRole ? (
+                      <div className="timeline-roles">
+                        {roles.map((exp, rIdx) => (
+                          <div className="timeline-role-entry" key={rIdx}>
+                            <div className="timeline-role-head">
+                              <h4 className="timeline-role-title">{exp.role}</h4>
+                              <span className="timeline-period">{exp.period}</span>
+                            </div>
+                            {renderRoleBody(exp)}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      renderRoleBody(first)
+                    )}
                   </div>
                 )}
               </div>

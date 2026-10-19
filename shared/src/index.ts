@@ -20,7 +20,10 @@ export interface WorkExperience {
   company: string;
   period: string;
   location: string;
+  summary?: string;
   highlights: string[];
+  // Optional titled sub-lists, rendered after the flat highlights.
+  highlightGroups?: { title: string; items: string[] }[];
   stack: string[];
   logoUrl?: string;
 }

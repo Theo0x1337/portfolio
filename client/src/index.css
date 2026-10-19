@@ -858,6 +858,66 @@ a:hover {
   font-size: 0.95rem;
 }
 
+.timeline-summary {
+  margin: 0 0 16px;
+  color: var(--text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.timeline-group-title {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+
+/* Multiple roles at one company, joined by a small vertical connector. */
+.timeline-role-entry {
+  position: relative;
+  padding-left: 22px;
+}
+
+.timeline-role-entry + .timeline-role-entry {
+  margin-top: 28px;
+}
+
+.timeline-role-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+.timeline-role-entry:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 21px;
+  bottom: -24px;
+  width: 2px;
+  background-color: var(--border);
+}
+
+.timeline-role-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.timeline-role-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
 /* Projects Grid */
 .projects-grid {
   display: grid;
