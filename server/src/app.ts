@@ -12,12 +12,29 @@ if (!ADMIN_TOKEN) {
   console.warn('[WARN] ADMIN_TOKEN is not set — admin login and write operations are disabled.');
 }
 
-// In-memory set of issued session tokens. Logging in mints a random,
-// opaque session token; the long-lived admin secret is never sent to the client.
-// NOTE: on serverless (Vercel) this set lives per-instance, so a minted session
-// is only valid on the instance that issued it. Fine for occasional admin use;
-// move to a shared store (e.g. Supabase / Redis) if you need durable sessions.
-const sessions = new Set<string>();
+// Stateless session tokens: "<expiresAt>.<hmac>", signed with a key derived
+// from ADMIN_TOKEN. Any serverless instance can verify them without shared
+// state, and the long-lived admin secret is never sent to the client.
+// Rotating ADMIN_TOKEN invalidates every issued session.
+const SESSION_TTL_MS = 12 * 60 * 60 * 1000;
+const sessionKey = crypto.createHmac('sha256', ADMIN_TOKEN).update('admin-session-v1').digest();
+
+function signSession(expiresAt: number): string {
+  return crypto.createHmac('sha256', sessionKey).update(String(expiresAt)).digest('hex');
+}
+
+function createSessionToken(): string {
+  const expiresAt = Date.now() + SESSION_TTL_MS;
+  return `${expiresAt}.${signSession(expiresAt)}`;
+}
+
+function isValidSessionToken(token: string): boolean {
+  if (!ADMIN_TOKEN) return false;
+  const [expiresAtStr, signature] = token.split('.');
+  const expiresAt = Number(expiresAtStr);
+  if (!signature || !Number.isFinite(expiresAt) || expiresAt < Date.now()) return false;
+  return safeEqual(signature, signSession(expiresAt));
+}
 
 // Constant-time comparison to avoid leaking the secret via timing.
 function safeEqual(a: string, b: string): boolean {
@@ -50,7 +67,7 @@ const authMiddleware = (req: express.Request, res: express.Response, next: expre
     return res.status(401).json({ error: 'Unauthorized: No token provided' });
   }
   const token = authHeader.split(' ')[1];
-  if (!token || !sessions.has(token)) {
+  if (!token || !isValidSessionToken(token)) {
     return res.status(403).json({ error: 'Forbidden: Invalid or expired session' });
   }
   next();
@@ -111,25 +128,22 @@ app.delete('/api/posts/:id', authMiddleware, async (req, res) => {
   }
 });
 
-// Admin login — mints a short-lived random session token on success.
+// Admin login — mints a short-lived signed session token on success.
 app.post('/api/auth/login', (req, res) => {
   const { password } = req.body;
   if (!ADMIN_TOKEN) {
     return res.status(503).json({ error: 'Admin login is disabled (ADMIN_TOKEN not configured).' });
   }
   if (typeof password === 'string' && safeEqual(password, ADMIN_TOKEN)) {
-    const sessionToken = crypto.randomBytes(32).toString('hex');
-    sessions.add(sessionToken);
-    res.json({ token: sessionToken });
+    res.json({ token: createSessionToken() });
   } else {
     res.status(401).json({ error: 'Invalid admin credentials' });
   }
 });
 
-// Logout — revokes the current session token.
+// Logout — sessions are stateless, so the client simply drops its token;
+// it expires on its own after SESSION_TTL_MS.
 app.post('/api/auth/logout', authMiddleware, (req, res) => {
-  const token = req.headers.authorization!.split(' ')[1];
-  sessions.delete(token);
   res.json({ success: true });
 });
 
